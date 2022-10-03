@@ -1,0 +1,108 @@
+* {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  text-decoration: none;
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+
+/* ======Banner===== */
+.banner {
+  width: 100%;
+  height: 40vh;
+  background-image: linear-gradient(to bottom right, hsl(240, 100%, 60%), lightblue);
+  color: white;
+}
+.banner h1 {
+  position: relative;
+  top:10%;
+  text-align: center;
+}
+.banner .search {
+  width: 75%;
+  position: relative;
+  top:30%;
+  left:50%;
+  translate:-50%;
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  max-width: 600px;
+}
+
+.banner .search input{
+  flex:1;
+  padding-left: 12px;
+}
+.banner .search input:active,
+.banner .search input:focus{
+  outline:none;
+}
+
+.searchBtn {
+  width: 40px;
+  height: 40px;
+  background: black;
+  cursor: pointer;
+}
+
+.searchBtn .icon {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: url("./Assets/right-arrow.svg") no-repeat 45% / 45%;
+  transition: 100ms;
+}
+.searchBtn:hover .icon,
+.searchBtn:active .icon{
+  background-size:55%;
+  background-position: 55%;
+}
+
+/* ======Info===== */
+.info{
+  position: absolute;
+  top:30%;
+  left:50%;
+  translate:-50%;
+  background:white;
+  width:70%;
+  min-height: 80px;
+  padding:20px;
+  border:1px solid gray;
+  border-radius: 10px;
+  display: flex;
+  z-index: 999;
+}
+.info > *{
+  flex:1;
+  flex-wrap: wrap;
+}
+.info > *:not(:first-child){
+  border-left:2px solid hsla(0, 0%, 0%, .05);
+  padding-left: 20px;
+}
+.info .title{
+  font-size: .6em;
+  font-weight: 750;
+  color:gray;
+}
+.info p{
+  font-weight: 500;
+}
+
+/* Map */
+@import url("https://unpkg.com/leaflet@1.9.1/dist/leaflet.css");
+
+.map{
+  position:absolute;
+  width:100%;
+  height: 80vh;
+}
+
+.leaflet-container{
+  width:100%;
+  height:100%;
+}
