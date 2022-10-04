@@ -32,16 +32,14 @@ const App = () => {
 
     User.open(
       "GET",
-      `http://ip-api.com/json/${IP}?fields=status,message,country,regionName,city,zip,lat,lon,timezone,isp,query`,
+      `https://ip-api.com/json/${IP}?fields=status,message,country,regionName,city,zip,lat,lon,timezone,isp,query`,
       true
     )
     User.send()
-    document.getElementsByClassName('map').scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"});
   }
   window.addEventListener("load", () => getLocation())
 
-  const handleSubmit = () =>
-    getLocation(document.querySelector(".search-bar").value)
+  const handleSubmit = () => getLocation(document.querySelector(".search-bar").value)
 
   return (
     <div className="App">
