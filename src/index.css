@@ -6,6 +6,9 @@
   font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+html{
+  scroll-behavior: smooth;
+}
 
 /* ======Banner===== */
 .banner {
@@ -35,6 +38,7 @@
 .banner .search input{
   flex:1;
   padding-left: 12px;
+  min-width: 0;
 }
 .banner .search input:active,
 .banner .search input:focus{
@@ -68,7 +72,7 @@
   left:50%;
   translate:-50%;
   background:white;
-  width:70%;
+  max-width:fit-content;
   min-height: 80px;
   padding:20px;
   border:1px solid gray;
@@ -77,8 +81,7 @@
   z-index: 999;
 }
 .info > *{
-  flex:1;
-  flex-wrap: wrap;
+  min-width: 200px;
 }
 .info > *:not(:first-child){
   border-left:2px solid hsla(0, 0%, 0%, .05);
@@ -98,11 +101,44 @@
 
 .map{
   position:absolute;
-  width:100%;
-  height: 80vh;
+  height:80%;
 }
 
 .leaflet-container{
   width:100%;
-  height:100%;
+  height:80%;
+}
+
+@media (max-width:900px) {
+  .info{
+    position: relative;
+    display: block;
+    width:100%
+  }
+  .info > *{
+    border: none;
+    margin:auto;
+    max-width:100%;
+    min-width: unset;
+    word-wrap: break-word;
+    padding-left:0;
+    padding:20px;
+    text-align: center;
+    margin-bottom:20px;
+  }
+  .map{
+    position: relative;
+    height: 400px;
+    margin-bottom: 50px;
+  }
+}
+
+@media (max-width:250px) {
+  .info > * {
+    padding: 0 0 0 0
+  }
+  .info > *:not(:first-child){
+    border: none;
+    padding-left:0;
+  }
 }

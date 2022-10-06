@@ -8,39 +8,57 @@ const root = createRoot(document.getElementById("root"))
 
 const App = () => {
   const [IP, setIP] = useState()
-  const [location, setLocation] = useState()
+  const [country, setCountry] = useState()
+  const [regionName, setRegionName] = useState()
+  const [city, setCity] = useState()
+  const [zip, setZip] = useState()
   const [timezone, setTimezone] = useState()
   const [ISP, setISP] = useState()
-  const [position, setPosition] = useState([51.505, -0.09])
+  const [position, setPosition] = useState([50, 50])
 
-  const getLocation = (IP) => {
-    if (IP === undefined) IP = ""
+  const getLocation = query => {
+    if (query === undefined || query === null) query=""
     const User = new XMLHttpRequest()
 
-    User.onreadystatechange = function() {
+    User.open("GET", `http://ip-api.com/json/${query}?fields=2122745`, true)
+
+    User.onreadystatechange = function () {
       if (this.readyState === 4 && this.status === 200) {
         const data = JSON.parse(User.responseText)
-        if (data.status !== "success")
+
+        if (data.status !== "success") {
           alert("An error occured, please try removing adblocker")
-        setIP(data.query)
-        setLocation(`${data.country}, ${data.regionName}, ${data.city}, ${data.zip}`)
-        setTimezone(data.timezone)
-        setISP(data.isp)
-        setPosition([data.lat, data.lon])
+        }
+
+        // here i'm trying to clear variables so they don't throw an error
+        const check = (variable) => {
+          let truth;
+          variable === undefined ||
+          variable === null
+            ? truth = false
+            : truth = true
+          return truth
+        }
+        if (check(data.query)) setIP(data.query)
+        if (check(data.country)) setCountry(`${data.country}`)
+        if (check(data.regionName)) setRegionName(`, ${data.regionName}`)
+        if (check(data.city)) setCity(`, ${data.city}`)
+        if (check(data.zip)) setZip(`, ${data.zip}`)
+        if (check(data.timezone)) setTimezone(data.timezone)
+        if (check(data.isp)) setISP(data.isp)
+        if (check(data.lat) && check(data.lon))setPosition([data.lat, data.lon])
+
+        document.querySelector('.info').scrollIntoView()
       }
     }
-
-    User.open(
-      "GET",
-      `https://ip-api.com/json/${IP}?fields=status,message,country,regionName,city,zip,lat,lon,timezone,isp,query`,
-      true
-    )
     User.send()
   }
-  window.addEventListener("load", () => getLocation())
 
-  const handleSubmit = () => getLocation(document.querySelector(".search-bar").value)
+  const handleSubmit = () => {
+    getLocation(document.querySelector(".search-bar").value)
+  }
 
+  window.onload = () => getLocation()
   return (
     <div className="App">
       <div className="banner">
@@ -56,8 +74,12 @@ const App = () => {
           </div>
         </div>
       </div>
-      <div className="map">
-        <MapContainer center={position} zoom={13} scrollWheelZoom={true} className="map">
+        <MapContainer
+          center={position}
+          zoom={13}
+          scrollWheelZoom={true}
+          className="map"
+        >
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -66,7 +88,6 @@ const App = () => {
             <Popup>Here is your Target, mr 007</Popup>
           </Marker>
         </MapContainer>
-      </div>
       <div className="info">
         <div className="ip-address">
           <p className="title">IP ADDRESS</p>
@@ -74,7 +95,7 @@ const App = () => {
         </div>
         <div className="location">
           <p className="title">LOCATION</p>
-          <p>{location}</p>
+          <p>{country} {regionName} {city} {zip}</p>
         </div>
         <div className="timezone">
           <p className="title">TIMEZONE</p>
