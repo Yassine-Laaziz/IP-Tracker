@@ -20,7 +20,7 @@ const App = () => {
     if (query === undefined || query === null) query=""
     const User = new XMLHttpRequest()
 
-    User.open("GET", `http://ip-api.com/json/${query}?fields=2122745`, true)
+    User.open("GET", `https://ip-api.com/json/${query}?fields=2122745`, true)
 
     User.onreadystatechange = function () {
       if (this.readyState === 4 && this.status === 200) {
