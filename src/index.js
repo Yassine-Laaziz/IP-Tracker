@@ -1,6 +1,6 @@
 import "./index.css"
 import { createRoot } from "react-dom/client"
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet"
 import axios from "axios"
 
@@ -29,8 +29,6 @@ const App = () => {
   // map
   const [position, setPosition] = useState([0, 0])
   const [zoom, setZoom] = useState(1)
-  // input
-  const [query, setQuery] = useState("")
 
   const mapJson = (Json) => {
     // country details
@@ -53,14 +51,17 @@ const App = () => {
     setNetwork(Json.network)
     setAsn(Json.asn)
     // map
-    setPosition([Json.latitude, Json.longitude])
+    if (Json.latitude && Json.longitude) setPosition([Json.latitude, Json.longitude])
   }
 
+  const input = useRef()
   const getLocation = useCallback(async () => {
+    const query = input.current.value
     try {
       if (query) {
         const res = await axios.get(`https://ipapi.co/${query}/json/`)
-        if (res) mapJson(res.data)
+        if (!res?.data?.error) mapJson(res.data)
+        else alert("Invalid IP Address")
       } else {
         const foundIp = (
           await axios.get("https://api.ipify.org?format=json&callback=?")
@@ -73,7 +74,7 @@ const App = () => {
     } catch (e) {
       alert("something went wrong, try to remove adblocker")
     }
-  }, [query, IP])
+  }, [IP])
 
   useEffect(() => {
     getLocation()
@@ -88,7 +89,7 @@ const App = () => {
             type="text"
             placeholder="Search for any IP Address"
             className="search-bar"
-            onChange={(e) => setQuery(e.target.value)}
+            ref={input}
           />
           <div className="searchBtn" onClick={() => getLocation()}>
             <div className="icon" />
